@@ -1,0 +1,11 @@
+Release Notes
+
+1.0 (2015-01-20)
+================
+
+Initial release.
+
+* Support JSON deserialization to Java beans.
+* Support path variables.
+* Support query as Map<String, String>.
+* Support HttpServletRequest and HttpServletResponse object.
