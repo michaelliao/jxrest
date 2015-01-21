@@ -122,6 +122,19 @@ public class RoutesTest {
         Routes routes = new Routes();
         routes.addHandler(new BadDeleteHandler());
     }
+
+    @Test
+    public void testProxy() throws Exception {
+        Routes routes = new Routes();
+        routes.addHandler(new SubHandler());
+        assertEquals("Hello, Michael", routes.call("GET", "/hello/Michael", jsonCallback, request, response));
+        assertEquals("Goodbye, Michael", routes.call("GET", "/goodbye/Michael", jsonCallback, request, response));
+        // using proxy:
+        Routes routes2 = new Routes();
+        routes2.addHandler(new ProxyHandler());
+        assertEquals("Hello, Michael!", routes2.call("GET", "/hello/Michael", jsonCallback, request, response));
+        assertEquals("Goodbye, Michael!", routes2.call("GET", "/goodbye/Michael", jsonCallback, request, response));
+    }
 }
 
 class TestHandler {
@@ -240,6 +253,45 @@ class BadAbstractHandler extends AbstractHandler {
     String get() {
         return "123";
     }
+}
+
+interface IHandler {
+    public String hello(String n);
+}
+
+class ParentHandler {
+    @GET
+    @Path("/goodbye/:name")
+    public String goodbye(String name) {
+        System.out.println("ParentHandler.goodbye()");
+        return "Goodbye, " + name;
+    }
+}
+
+class SubHandler extends ParentHandler implements IHandler {
+
+    @GET
+    @Path("/hello/:name")
+    public String hello(String name) {
+        System.out.println("SubHandler.hello()");
+        return "Hello, " + name;
+    }    
+}
+
+class ProxyHandler extends SubHandler {
+
+    @Override
+    public String hello(String name) {
+        System.out.println("ProxyHandler.hello()");
+        return super.hello(name) + "!";
+    }
+
+    @Override
+    public String goodbye(String name) {
+        System.out.println("ProxyHandler.goodbye()");
+        return super.goodbye(name) + "!";
+    }
+    
 }
 
 class User {
