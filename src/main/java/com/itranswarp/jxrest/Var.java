@@ -5,6 +5,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * A Var holds information of a method argument.
+ * 
+ * @author Michael Liao
+ */
 class Var {
 
     static final int PATH_VAR = 0;

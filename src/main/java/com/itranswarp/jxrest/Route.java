@@ -10,6 +10,11 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * Route by regular express.
+ * 
+ * @author Michael Liao
+ */
 class Route {
 
     static final Log log = LogFactory.getLog(Route.class);

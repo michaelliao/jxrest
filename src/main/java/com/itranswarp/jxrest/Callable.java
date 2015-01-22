@@ -14,6 +14,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Callable object to hold method and argument informations.
+ * 
+ * @author Michael Liao
+ */
 class Callable {
 
     final boolean isStatic;

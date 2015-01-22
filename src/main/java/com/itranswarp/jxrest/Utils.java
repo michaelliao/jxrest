@@ -4,6 +4,11 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Utils for internal use only.
+ * 
+ * @author Michael Liao
+ */
 class Utils {
 
     static List<Method> getAllMethods(Class<?> clazz) {
