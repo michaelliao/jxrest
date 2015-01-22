@@ -53,7 +53,7 @@ public class RestApiServlet extends GenericServlet {
 
     public void init() throws ServletException {
         log.info("Init RestApiServlet...");
-        if (this.handler != null) {
+        if (this.handler == null) {
             this.handler = new RestApiHandler();
         }
         setUrlPrefix(getInitParameter("urlPrefix"));

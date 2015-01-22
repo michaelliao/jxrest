@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                             http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="SampleWebAppID"
+         version="3.0">
+    <servlet>
+        <servlet-name>restApiServlet</servlet-name>
+        <servlet-class>com.itranswarp.jxrest.RestApiServlet</servlet-class>
+        <init-param>
+            <param-name>handlers</param-name>
+            <param-value>com.itranswarp.jxrest.handler.UserHandler</param-value>
+        </init-param>
+        <init-param>
+            <param-name>urlPrefix</param-name>
+            <param-value>/api</param-value>
+        </init-param>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>restApiServlet</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+</web-app>

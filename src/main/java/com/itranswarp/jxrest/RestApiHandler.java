@@ -26,7 +26,11 @@ public class RestApiHandler {
     Log log = LogFactory.getLog(getClass());
 
     Routes routes = new Routes();
-    JsonBuilder jsonBuilder;
+    JsonBuilder jsonBuilder = new JsonBuilder();
+
+    public void setJsonBuilder(JsonBuilder jsonBuilder) {
+        this.jsonBuilder = jsonBuilder;
+    }
 
     public void setHandlers(List<String> names) {
         for (String name : names) {
@@ -107,7 +111,7 @@ public class RestApiHandler {
 
     void processApiRequest(HttpServletRequest req, HttpServletResponse resp, String method, String path) throws IOException {
         // check content type:
-        if (!"GET".equals(method) && !checkContentType(req.getContentType())) {
+        if (!"GET".equals(method) && (req.getContentLength()!=0 && !checkContentType(req.getContentType()))) {
             log.debug("415 UNSUPPORTED MEDIA TYPE: not a json request.");
             resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Request must be application/json.");
             return;
@@ -124,8 +128,8 @@ public class RestApiHandler {
             if (ret instanceof Void) {
                 return;
             }
-            resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("application/json");
             Writer writer = resp.getWriter();
             JsonWriter jsonWriter = this.jsonBuilder.createWriter(writer);
             jsonWriter.write(ret);

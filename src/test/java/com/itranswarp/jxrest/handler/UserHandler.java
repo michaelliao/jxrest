@@ -1,8 +1,8 @@
 package com.itranswarp.jxrest.handler;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +16,7 @@ import com.itranswarp.jsonstream.annotation.Required;
 import com.itranswarp.jsonstream.format.Email;
 import com.itranswarp.jsonstream.format.NonBlank;
 import com.itranswarp.jxrest.ApiException;
+import com.itranswarp.jxrest.DELETE;
 import com.itranswarp.jxrest.GET;
 import com.itranswarp.jxrest.POST;
 import com.itranswarp.jxrest.PUT;
@@ -26,19 +27,31 @@ import com.itranswarp.jxrest.Path;
  * 
  * @author Michael Liao
  */
-public class RestHandler {
+public class UserHandler {
 
     long nextId = 0;
-    Map<String, User> users = new ConcurrentHashMap<String, User>();
+    Map<Long, User> users = new ConcurrentHashMap<Long, User>();
 
-    String nextId() {
+    public UserHandler() {
+        System.out.println("Init RestHandler...");
+    }
+
+    long nextId() {
         nextId ++;
-        return "u-" + nextId;
+        return nextId;
+    }
+
+    @GET
+    @Path("/users")
+    Object getUsers() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("users", users.values().toArray(new User[0]));
+        return map;
     }
 
     @GET
     @Path("/users/:id")
-    public User createUser(String id) {
+    public User getUser(long id) {
         User user = users.get(id);
         if (user == null) {
             throw new ApiException("404");
@@ -48,16 +61,15 @@ public class RestHandler {
 
     @PUT
     @Path("/users")
-    public User createUser(User user) {
-        String id = nextId();
-        user.id = id;
-        users.put(id, user);
+    User createUser(User user) {
+        user.id = nextId();
+        users.put(user.id, user);
         return user;
     }
 
     @POST
     @Path("/users/:id")
-    public User updateUser(String id, User user) {
+    public User updateUser(long id, User user) {
         User exist = users.get(id);
         if (exist == null) {
             throw new ApiException("entity:notfound", "User");
@@ -66,6 +78,19 @@ public class RestHandler {
         exist.email = user.email;
         exist.password = user.password;
         return exist;
+    }
+
+    @DELETE
+    @Path("/users/:id")
+    private Map<String, Object> deleteUser(long id) {
+        User exist = users.remove(id);
+        if (exist == null) {
+            throw new ApiException("entity:notfound", "User");
+        }
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("deleted", true);
+        map.put("id", id);
+        return map;
     }
 
     @POST
@@ -110,17 +135,17 @@ abstract class Entity {
 
 class User extends Entity {
 
-    String id;
+    long id;
     String email;
     String password;
     String name;
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
     @JsonIgnore
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

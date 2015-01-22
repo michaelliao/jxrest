@@ -55,7 +55,7 @@ public class RestApiFilter implements Filter {
 
     public void init(FilterConfig config) throws ServletException {
         log.info("Init RestApiFilter...");
-        if (this.handler != null) {
+        if (this.handler == null) {
             this.handler = new RestApiHandler();
         }
         setUrlPrefix(config.getInitParameter("urlPrefix"));
