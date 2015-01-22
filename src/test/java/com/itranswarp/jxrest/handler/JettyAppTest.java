@@ -37,6 +37,7 @@ public class JettyAppTest {
             throw new RuntimeException("Cannot run Jetty test in jar/war.");
         }
         String path = url.substring(5);
+        System.out.println("Init webapp at " + path + "...");
         // init servlet context:
         WebAppContext webapp = new WebAppContext();
         webapp.setContextPath("/");
